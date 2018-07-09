@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Circular-Std-Bold.otf">
+            <string>Circular-Std-Bold</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="StartTutorialViewController" customModule="PesquisaApp" customModuleProvider="target">
+            <connections>
+                <outlet property="backButton" destination="ols-2T-ixe" id="9Cb-iW-fcY"/>
+                <outlet property="collectionView" destination="WtU-B5-iwG" id="I1C-xM-vgT"/>
+                <outlet property="fowardButton" destination="OvA-1w-d7H" id="OZd-Yo-Q1D"/>
+                <outlet property="jumpIntroButton" destination="e3b-Zu-XZw" id="zO8-q6-uxV"/>
+                <outlet property="pageControl" destination="bI3-Kz-7Wd" id="fiW-hr-yxu"/>
+                <outlet property="titleLabel" destination="wWb-63-zWb" id="fo0-hK-cyo"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nome da Seção" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wWb-63-zWb">
+                    <rect key="frame" x="10" y="52" width="355" height="28"/>
+                    <fontDescription key="fontDescription" name="Circular-Std-Bold" family="Circular Std" pointSize="24"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OvA-1w-d7H">
+                    <rect key="frame" x="295" y="541" width="48" height="48"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="OvA-1w-d7H" secondAttribute="height" multiplier="1:1" id="JxF-rB-XaK"/>
+                    </constraints>
+                    <state key="normal" backgroundImage="Next Step Button"/>
+                    <state key="disabled" backgroundImage="Disabled Next Step Button"/>
+                    <connections>
+                        <action selector="goNextPage:" destination="-1" eventType="touchUpInside" id="yFO-f7-Z2u"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ols-2T-ixe">
+                    <rect key="frame" x="32" y="541" width="48" height="48"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="ols-2T-ixe" secondAttribute="height" multiplier="1:1" id="s6t-vK-9ne"/>
+                    </constraints>
+                    <state key="normal" backgroundImage="Previous Step Button"/>
+                    <state key="disabled" backgroundImage="Disabled Previous Step Button"/>
+                    <connections>
+                        <action selector="goPreviousPage:" destination="-1" eventType="touchUpInside" id="s6H-PK-qLB"/>
+                    </connections>
+                </button>
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="WtU-B5-iwG">
+                    <rect key="frame" x="0.0" y="90" width="375" height="436"/>
+                    <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="qbd-c8-4aD">
+                        <size key="itemSize" width="50" height="50"/>
+                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    </collectionViewFlowLayout>
+                </collectionView>
+                <pageControl opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="252" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="4" translatesAutoresizingMaskIntoConstraints="NO" id="bI3-Kz-7Wd">
+                    <rect key="frame" x="160" y="546" width="55" height="37"/>
+                    <color key="pageIndicatorTintColor" red="0.86666666670000003" green="0.87843137250000003" blue="0.90196078430000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="currentPageIndicatorTintColor" red="0.086274509799999996" green="0.58823529409999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                </pageControl>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e3b-Zu-XZw">
+                    <rect key="frame" x="164.5" y="603" width="46" height="44"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="pMx-8c-v8e"/>
+                    </constraints>
+                    <state key="normal" title="Button"/>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="e3b-Zu-XZw" secondAttribute="bottom" constant="20" id="07E-UU-eoG"/>
+                <constraint firstItem="wWb-63-zWb" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="10" id="2Da-Ey-7oi"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="OvA-1w-d7H" secondAttribute="trailing" constant="32" id="GOp-Uy-3tM"/>
+                <constraint firstItem="WtU-B5-iwG" firstAttribute="top" secondItem="wWb-63-zWb" secondAttribute="bottom" constant="10" id="LGv-HX-ZyY"/>
+                <constraint firstItem="OvA-1w-d7H" firstAttribute="centerY" secondItem="bI3-Kz-7Wd" secondAttribute="centerY" id="LS3-Jg-ClI"/>
+                <constraint firstItem="e3b-Zu-XZw" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="SfG-5R-T5d"/>
+                <constraint firstItem="ols-2T-ixe" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="32" id="Sid-4H-4Jh"/>
+                <constraint firstItem="bI3-Kz-7Wd" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="UWu-74-l5T"/>
+                <constraint firstItem="wWb-63-zWb" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="32" id="VDh-X1-9GW"/>
+                <constraint firstItem="WtU-B5-iwG" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="WPG-zz-Ia4"/>
+                <constraint firstItem="OvA-1w-d7H" firstAttribute="top" secondItem="WtU-B5-iwG" secondAttribute="bottom" constant="15" id="bi7-nv-a7t"/>
+                <constraint firstItem="WtU-B5-iwG" firstAttribute="top" secondItem="wWb-63-zWb" secondAttribute="bottom" constant="10" id="ev8-E5-r6Q"/>
+                <constraint firstItem="WtU-B5-iwG" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="hay-79-jE6"/>
+                <constraint firstItem="OvA-1w-d7H" firstAttribute="top" secondItem="ols-2T-ixe" secondAttribute="top" id="k4E-gB-jLS"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="wWb-63-zWb" secondAttribute="trailing" constant="10" id="mx8-Us-nMv"/>
+                <constraint firstItem="e3b-Zu-XZw" firstAttribute="top" secondItem="bI3-Kz-7Wd" secondAttribute="bottom" constant="20" id="nmV-1S-ico"/>
+                <constraint firstItem="ols-2T-ixe" firstAttribute="centerY" secondItem="bI3-Kz-7Wd" secondAttribute="centerY" id="oym-lb-C3g"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <userDefinedRuntimeAttributes>
+                <userDefinedRuntimeAttribute type="number" keyPath="shadowRadius">
+                    <real key="value" value="0.0"/>
+                </userDefinedRuntimeAttribute>
+                <userDefinedRuntimeAttribute type="size" keyPath="shadowOffset">
+                    <size key="value" width="0.0" height="0.0"/>
+                </userDefinedRuntimeAttribute>
+            </userDefinedRuntimeAttributes>
+        </view>
+    </objects>
+    <resources>
+        <image name="Disabled Next Step Button" width="48" height="48"/>
+        <image name="Disabled Previous Step Button" width="48" height="48"/>
+        <image name="Next Step Button" width="48" height="48"/>
+        <image name="Previous Step Button" width="48" height="48"/>
+    </resources>
+</document>
