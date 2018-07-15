@@ -44,7 +44,7 @@ class QuestionViewController: UIViewController, QuestionDelegate {
         }
         showNotification()
         progressBarWidth.constant = AppConfig.shared.progressBarValue
-        if AppConfig.shared.questionsCount > 33 {
+        if AppConfig.shared.questionsCount > 34 {
             UserDefaults.standard.set(true, forKey: finishedPoolKey)
             let congrats = UILabel()
             congrats.numberOfLines = 0
@@ -68,19 +68,29 @@ class QuestionViewController: UIViewController, QuestionDelegate {
             
             view.addSubview(btn)
             btn.anchor(top: congrats.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 30, paddingLeft: 16, paddingBottom: 0, paddingRight: 16, width: 0, height: 80)
-
             
-            do {
-                let encoder = JSONEncoder()
-                encoder.outputFormatting = .prettyPrinted
-                let jsonData = try encoder.encode(AppConfig.shared.answers)
-                let jsonString = String(data: jsonData, encoding: .utf8)!
-                print(jsonString) // [{"sentence":"Hello world","lang":"en"},{"sentence":"Hallo Welt","lang":"de"}]
-                
-                // and decode it back
-//                let decodedSentences = try JSONDecoder().decode([Answer].self, from: jsonData)
-//                print(decodedSentences)
-            } catch { print(error) }
+            let backBtn = UIButton(type: .system)
+            backBtn.setTitle("Voltar", for: .normal)
+            backBtn.layer.borderWidth = 2
+            backBtn.layer.borderColor = UIColor.gray.cgColor
+            backBtn.setTitleColor(UIColor.gray, for: .normal)
+            backBtn.heightAnchor.constraint(equalToConstant: 44).isActive = true
+            backBtn.cornerRadius = 22
+            backBtn.addTarget(self, action: #selector(goBack), for: .touchUpInside)
+            
+            view.addSubview(backBtn)
+
+            backBtn.anchor(top: btn.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 24, paddingLeft: 32, paddingBottom: 0, paddingRight: 32, width: 0, height: 0)
+            
+            
+            APIManager.shared.sendAnswers(data: AppConfig.shared.answers)
+//            do {
+//                let encoder = JSONEncoder()
+//                encoder.outputFormatting = .prettyPrinted
+//                let jsonData = try encoder.encode(AppConfig.shared.answers)
+//                let jsonString = String(data: jsonData, encoding: .utf8)!
+//                print(jsonString)
+//            } catch { print(error) }
             
             return
         }
@@ -121,16 +131,14 @@ class QuestionViewController: UIViewController, QuestionDelegate {
         view.addSubview(viewStack)
         
         viewStack.anchor(top: progressStack.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 16, paddingLeft: 16, paddingBottom: 0, paddingRight: 16, width: 0, height: 0)
+        
+        //goBtn.sendActions(for: .touchUpInside)
     }
     
     @objc func downloadTapped() {
         let vc = PDFViewController()
-        if self.navigationController != nil {
-            self.navigationController?.present(vc, animated: true, completion: nil)
-        } else {
-            let nav = UINavigationController(rootViewController: vc)
-            self.present(nav, animated: true, completion: nil)
-        }
+        let nav = UINavigationController(rootViewController: vc)
+        self.present(nav, animated: true, completion: nil)
     }
     
     func showNotification() {
@@ -140,7 +148,11 @@ class QuestionViewController: UIViewController, QuestionDelegate {
         let foregroundColor = UIColor.darkText
         view.configureTheme(backgroundColor: backgroundColor, foregroundColor: foregroundColor, iconImage: #imageLiteral(resourceName: "alert-circle-256").imageWithColor(color: UIColor(red: 50/255, green: 143/255, blue: 212/255, alpha: 1)), iconText: nil)
         if AppConfig.shared.questionsCount == 1 {
-            view.configureContent(title: "", body: "Pesquisa iniciada.")
+            if UserDefaults.standard.bool(forKey: finishedPoolKey) {
+                view.configureContent(title: "Pesquisa já realizada", body: "Avance para ver suas respostas.")
+            } else {
+                view.configureContent(title: "", body: "Pesquisa iniciada.")
+            }
         } else {
             var percent = "0"
             if AppConfig.shared.questionsCount == (AppConfig.shared.progressNotification[1]) {
@@ -169,9 +181,7 @@ class QuestionViewController: UIViewController, QuestionDelegate {
     
     @objc func nextQuestion() {
         
-        AppConfig.shared.questionsCount += 1
-        AppConfig.shared.progressBarValue += self.progresBar.frame.width / 35
-        if AppConfig.shared.questionsCount > 33 {
+        if AppConfig.shared.questionsCount > 34 {
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let vc = storyboard.instantiateViewController(withIdentifier: "QuestionViewControllerID") as! QuestionViewController
             
@@ -185,17 +195,22 @@ class QuestionViewController: UIViewController, QuestionDelegate {
             }
             return
         }
+        print(AppConfig.shared.questionsCount)
+        
         AppConfig.shared.answers[AppConfig.shared.questionsCount].selected.removeAll()
         AppConfig.shared.answers[AppConfig.shared.questionsCount].text.removeAll()
+        AppConfig.shared.answers[AppConfig.shared.questionsCount].indexes.removeAll()
         for i in questionCardView.buttonsArray {
             if i.selectedAnswer {
                 AppConfig.shared.answers[AppConfig.shared.questionsCount].selected.append(i.answer)
+                AppConfig.shared.answers[AppConfig.shared.questionsCount].indexes.append(i.index)
             }
         }
         
         for i in questionCardView.checkButtonsArray {
             if i.selectedAnswer {
                 AppConfig.shared.answers[AppConfig.shared.questionsCount].selected.append(i.answer)
+                AppConfig.shared.answers[AppConfig.shared.questionsCount].indexes.append(i.index)
             }
         }
         
@@ -206,27 +221,23 @@ class QuestionViewController: UIViewController, QuestionDelegate {
             }
         }
         //8,18
-        if AppConfig.shared.questionsCount == 1 {
+        if AppConfig.shared.questionsCount == 0 {
 
-        } else if AppConfig.shared.questionsCount == 13 {
+        } else if AppConfig.shared.questionsCount == 12 {
 
-        } else {
+        } else if AppConfig.shared.questionsCount > 0 {
             if !questionCardView.buttonsArray.isEmpty, AppConfig.shared.answers[AppConfig.shared.questionsCount].selected.isEmpty {
-                AppConfig.shared.questionsCount -= 1
-                AppConfig.shared.progressBarValue -= self.progresBar.frame.width / 35
                 return
             } else if !questionCardView.checkButtonsArray.isEmpty, AppConfig.shared.answers[AppConfig.shared.questionsCount].selected.isEmpty {
-                AppConfig.shared.questionsCount -= 1
-                AppConfig.shared.progressBarValue -= self.progresBar.frame.width / 35
                 return
             }else if !questionCardView.textFieldArray.isEmpty && questionCardView.buttonsArray.isEmpty, AppConfig.shared.answers[AppConfig.shared.questionsCount].text.isEmpty,
-                AppConfig.shared.questionsCount != 18 {
-                AppConfig.shared.questionsCount -= 1
-                AppConfig.shared.progressBarValue -= self.progresBar.frame.width / 35
+                AppConfig.shared.questionsCount != 17 {
                 return
             }
         }
 
+        AppConfig.shared.questionsCount += 1
+        AppConfig.shared.progressBarValue += self.progresBar.frame.width / 35
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "QuestionViewControllerID") as! QuestionViewController
 
@@ -255,6 +266,7 @@ class QuestionViewController: UIViewController, QuestionDelegate {
     }
     
     @IBAction func goToHome(_ sender: Any) {
+        
         let newPage = AppStoryboard.Main.viewController(viewControllerClass: ViewController.self)
         AppConfig.shared.questionsCount = 0
         AppConfig.shared.progressBarValue = 0
@@ -263,7 +275,7 @@ class QuestionViewController: UIViewController, QuestionDelegate {
         }
         DispatchQueue.main.async {
             UIView.transition(with: window, duration: 0.25, options: .transitionCrossDissolve, animations: {
-                window.rootViewController = newPage
+                window.rootViewController = UINavigationController(rootViewController: newPage)
             })
         }
     }

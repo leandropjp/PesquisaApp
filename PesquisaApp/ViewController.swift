@@ -18,7 +18,16 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         self.navigationItem.title = ""
         self.navigationController?.navigationBar.isHidden = true
+        
+        
+//        APIManager.shared.sendAnswers(data: AppConfig.shared.answers)
         // Do any additional setup after loading the view, typically from a nib.
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationItem.title = ""
+        self.navigationController?.navigationBar.isHidden = true
     }
 
     override func didReceiveMemoryWarning() {
@@ -30,19 +39,24 @@ class ViewController: UIViewController {
         
         // Use data from the view controller which initiated the unwind segue
     }
-
+    
+    @IBAction func openPoolList(_ sender: Any) {
+        let vc = PoolListViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
     @IBAction func openPDF(_ sender: Any) {
         if UserDefaults.standard.bool(forKey: finishedPoolKey) {
             let vc = PDFViewController()
-            vc.navigationItem.title = "Livro"
-            self.navigationController?.pushViewController(vc, animated: true)
+            let nav = UINavigationController(rootViewController: vc)
+            self.present(nav, animated: true, completion: nil)
         } else {
             let view = MessageView.viewFromNib(layout: .cardView)
             view.configureDropShadow()
             let backgroundColor = UIColor(red: 225.0/255.0, green: 225.0/255.0, blue: 225.0/255.0, alpha: 1.0)
             let foregroundColor = UIColor.darkText
             view.configureTheme(backgroundColor: backgroundColor, foregroundColor: foregroundColor, iconImage: #imageLiteral(resourceName: "alert-circle-256").imageWithColor(color: UIColor(red: 50/255, green: 143/255, blue: 212/255, alpha: 1)), iconText: nil)
-            view.configureContent(title: "Erro", body: "Você ainda não possui acesso a esta área. Faça a pesquisa!")
+            view.configureContent(title: "Erro", body: "Você ainda não possui acesso a esta área. Faça uma pesquisa!")
             view.button?.isHidden = true
             SwiftMessages.show(view: view)
         }

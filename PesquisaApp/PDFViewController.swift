@@ -47,12 +47,7 @@ class PDFViewController: UIViewController, UIWebViewDelegate {
     }
     
     @objc func backAction() {
-        if navigationController != nil {
-            self.navigationController?.popViewController(animated: true)
-        } else {
-            self.dismiss(animated: true, completion: nil)
-        }
-        
+        self.dismiss(animated: true, completion: nil)
     }
     
     func webViewDidFinishLoad(_ webView: UIWebView) {

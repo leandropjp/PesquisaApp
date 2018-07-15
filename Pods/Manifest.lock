@@ -1,8 +1,14 @@
 PODS:
+  - Alamofire (4.7.2)
   - SwiftMessages (4.0.0)
 
 DEPENDENCIES:
+  - Alamofire
   - SwiftMessages (from `https://github.com/SwiftKickMobile/SwiftMessages.git`, branch `swift4.0`)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Alamofire
 
 EXTERNAL SOURCES:
   SwiftMessages:
@@ -15,8 +21,9 @@ CHECKOUT OPTIONS:
     :git: https://github.com/SwiftKickMobile/SwiftMessages.git
 
 SPEC CHECKSUMS:
+  Alamofire: e4fa87002c137ba2d8d634d2c51fabcda0d5c223
   SwiftMessages: e9ae56244859ad352b4382f4663ba76bb9b237f4
 
-PODFILE CHECKSUM: 43bc4dcbc287e7ac37ffcf462273408502632faf
+PODFILE CHECKSUM: 4eaa61630ee9beee37b22f2d6b5c345585f6a00e
 
 COCOAPODS: 1.5.3

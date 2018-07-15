@@ -109,7 +109,8 @@ class QuestionView: UIView {
                 finalText = finalText.replacingOccurrences(of: textFlag, with: "")
                 let commentField = QuestionField()
                 commentField.index = index
-                commentField.answer = finalText
+                let final = finalText.components(separatedBy: "*").first!
+                commentField.answer = final
                 commentField.borderStyle = .roundedRect
                 commentField.placeholder = placeholder
                 commentField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: UIControlEvents.editingChanged)
@@ -124,7 +125,8 @@ class QuestionView: UIView {
                 radioButton.isHidden = true
                 finalText = finalText.replacingOccurrences(of: textNumberFlag, with: "")
                 let commentField = QuestionField()
-                commentField.answer = finalText
+                let final = finalText.components(separatedBy: "*").first!
+                commentField.answer = final
                 commentField.index = index
                 commentField.borderStyle = .roundedRect
                 commentField.keyboardType = .numberPad
@@ -141,7 +143,8 @@ class QuestionView: UIView {
                 finalText = finalText.replacingOccurrences(of: commentFlag, with: "")
                 commentTextField = QuestionField()
                 commentTextField?.index = index
-                commentTextField?.answer = finalText
+                let final = finalText.components(separatedBy: "*").first!
+                commentTextField?.answer = final
                 commentTextField?.borderStyle = .roundedRect
                 commentTextField?.placeholder = placeholder
                 answers.append(UIStackView(arrangedSubviews: [commentTextField!]))
@@ -151,14 +154,35 @@ class QuestionView: UIView {
                     radioButton.hasIf = true
                     finalText = finalText.replacingOccurrences(of: ifFlag, with: "")
                     commentTextField?.isHidden = true
+                    
+                    let query = finalText
+                    let regex = try! NSRegularExpression(pattern:"%(.*?)%", options: [])
+                    var results = [String]()
+                    
+                    regex.enumerateMatches(in: query, options: [], range: NSMakeRange(0, query.utf16.count)) { result, flags, stop in
+                        if let r = result?.range(at: 1), let range = Range(r, in: query) {
+                            results.append(String(query[range]))
+                        }
+                    }
+                    if let placeholder = results.first {
+                        finalText = finalText.replacingOccurrences(of: "%\(placeholder)%", with: "")
+                        commentTextField?.placeholder = placeholder
+                    }
+                    
+                    if let text = UserDefaults.standard.string(forKey: "\(AppConfig.shared.questionsCount)_\(index)_check"), !text.isEmpty {
+                        commentTextField?.text = text
+                        commentTextField?.isHidden = false
+                    }
+                    
                 }
                 
                 if let text = UserDefaults.standard.string(forKey: "\(AppConfig.shared.questionsCount)_\(index)_check") {
                     commentTextField?.text = text
                 }
             }
-            radioButton.answer = finalText
-            textLabel.text = finalText
+            
+            radioButton.answer = finalText.replacingOccurrences(of: "*", with: "")
+            textLabel.text = finalText.replacingOccurrences(of: "*", with: "")
             textLabel.font = UIFont.systemFont(ofSize: 16)
         }
         let botStack = UIStackView(arrangedSubviews: answers)

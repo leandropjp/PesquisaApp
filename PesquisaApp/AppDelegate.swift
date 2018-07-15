@@ -17,12 +17,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-        let tuto = UserDefaults.standard.object(forKey: "tutorial")
-        let down = UserDefaults.standard.object(forKey: finishedPoolKey)
-        UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
-        UserDefaults.standard.synchronize()
-        UserDefaults.standard.set(tuto, forKey: "tutorial")
-        UserDefaults.standard.set(down, forKey: finishedPoolKey)
+//        let tuto = UserDefaults.standard.object(forKey: "tutorial")
+//        let down = UserDefaults.standard.object(forKey: finishedPoolKey)
+//        UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
+//        UserDefaults.standard.synchronize()
+//        UserDefaults.standard.set(tuto, forKey: "tutorial")
+//        UserDefaults.standard.set(down, forKey: finishedPoolKey)
         if UserDefaults.standard.object(forKey: "tutorial") != nil {
             let nav = AppStoryboard.Main.viewController(viewControllerClass: UINavigationController.self)
             self.window?.rootViewController = nav
