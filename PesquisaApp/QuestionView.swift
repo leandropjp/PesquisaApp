@@ -110,7 +110,7 @@ class QuestionView: UIView {
                 let commentField = QuestionField()
                 commentField.index = index
                 let final = finalText.components(separatedBy: "*").first!
-                commentField.answer = final
+                commentField.answer = final.replacingOccurrences(of: "*", with: "")
                 commentField.borderStyle = .roundedRect
                 commentField.placeholder = placeholder
                 commentField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: UIControlEvents.editingChanged)
@@ -126,7 +126,7 @@ class QuestionView: UIView {
                 finalText = finalText.replacingOccurrences(of: textNumberFlag, with: "")
                 let commentField = QuestionField()
                 let final = finalText.components(separatedBy: "*").first!
-                commentField.answer = final
+                commentField.answer = final.replacingOccurrences(of: "*", with: "")
                 commentField.index = index
                 commentField.borderStyle = .roundedRect
                 commentField.keyboardType = .numberPad
@@ -144,7 +144,7 @@ class QuestionView: UIView {
                 commentTextField = QuestionField()
                 commentTextField?.index = index
                 let final = finalText.components(separatedBy: "*").first!
-                commentTextField?.answer = final
+                commentTextField?.answer = final.replacingOccurrences(of: "*", with: "")
                 commentTextField?.borderStyle = .roundedRect
                 commentTextField?.placeholder = placeholder
                 answers.append(UIStackView(arrangedSubviews: [commentTextField!]))
