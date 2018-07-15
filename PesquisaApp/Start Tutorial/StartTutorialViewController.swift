@@ -66,7 +66,7 @@ class StartTutorialViewController: UIViewController, UICollectionViewDelegate, U
         
         DispatchQueue.main.async {
             UIView.transition(with: window, duration: 0.25, options: .transitionCrossDissolve, animations: {
-                window.rootViewController = vc
+                window.rootViewController = UINavigationController(rootViewController: vc)
             })
         }
     }
