@@ -45,16 +45,37 @@ class QuestionViewController: UIViewController, QuestionDelegate {
         showNotification()
         progressBarWidth.constant = AppConfig.shared.progressBarValue
         if AppConfig.shared.questionsCount > 34 {
-            UserDefaults.standard.set(true, forKey: finishedPoolKey)
             let congrats = UILabel()
             congrats.numberOfLines = 0
             congrats.textAlignment = .center
             let attrs = NSMutableAttributedString(string: "Parabéns! \n\n", attributes: [.font: UIFont.boldSystemFont(ofSize: 22),
-                                                                                    .foregroundColor: UIColor.black])
+                                                                                          .foregroundColor: UIColor.black])
             attrs.append(NSAttributedString(string: "Agora você acesso gratuito ao livro IMPULSIVA-MENTE.", attributes: [.font: UIFont.systemFont(ofSize: 16),
                                                                                                                           .foregroundColor: UIColor.gray]))
             congrats.attributedText = attrs
             
+            var lastInfo = ""
+            
+            if let position = UserDefaults.standard.object(forKey: "position") as? String {
+                lastInfo = "Você foi o \(position)° a responder."
+                let attrs = NSMutableAttributedString(string: "Parabéns! \n\n", attributes: [.font: UIFont.boldSystemFont(ofSize: 22),
+                                                                                              .foregroundColor: UIColor.black])
+                attrs.append(NSAttributedString(string: "\(lastInfo) \nAgora você acesso gratuito ao livro IMPULSIVA-MENTE.", attributes: [.font: UIFont.systemFont(ofSize: 16),
+                                                                                                                                            .foregroundColor: UIColor.gray]))
+                congrats.attributedText = attrs
+            } else {
+                APIManager.shared.sendAnswers(data: AppConfig.shared.answers, completion: { position in
+                    UserDefaults.standard.set("\(position)", forKey: "position")
+                    lastInfo = "Você foi o \(position)° a responder."
+                    let attrs = NSMutableAttributedString(string: "Parabéns! \n\n", attributes: [.font: UIFont.boldSystemFont(ofSize: 22),
+                                                                                                  .foregroundColor: UIColor.black])
+                    attrs.append(NSAttributedString(string: "\(lastInfo) \nAgora você acesso gratuito ao livro IMPULSIVA-MENTE.", attributes: [.font: UIFont.systemFont(ofSize: 16),
+                                                                                                                                                .foregroundColor: UIColor.gray]))
+                    congrats.attributedText = attrs
+                })
+            }
+
+            UserDefaults.standard.set(true, forKey: finishedPoolKey)
             let btn = TopIconButton()
             btn.setImage(#imageLiteral(resourceName: "Icon_download").withRenderingMode(.alwaysOriginal), for: .normal)
             btn.imageView?.contentMode = .scaleAspectFit
@@ -83,7 +104,7 @@ class QuestionViewController: UIViewController, QuestionDelegate {
             backBtn.anchor(top: btn.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 24, paddingLeft: 32, paddingBottom: 0, paddingRight: 32, width: 0, height: 0)
             
             
-            APIManager.shared.sendAnswers(data: AppConfig.shared.answers)
+            
 //            do {
 //                let encoder = JSONEncoder()
 //                encoder.outputFormatting = .prettyPrinted
@@ -132,7 +153,7 @@ class QuestionViewController: UIViewController, QuestionDelegate {
         
         viewStack.anchor(top: progressStack.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 16, paddingLeft: 16, paddingBottom: 0, paddingRight: 16, width: 0, height: 0)
         
-        //goBtn.sendActions(for: .touchUpInside)
+        goBtn.sendActions(for: .touchUpInside)
     }
     
     @objc func downloadTapped() {
@@ -203,14 +224,14 @@ class QuestionViewController: UIViewController, QuestionDelegate {
         for i in questionCardView.buttonsArray {
             if i.selectedAnswer {
                 AppConfig.shared.answers[AppConfig.shared.questionsCount].selected.append(i.answer)
-                AppConfig.shared.answers[AppConfig.shared.questionsCount].indexes.append(i.index)
+                AppConfig.shared.answers[AppConfig.shared.questionsCount].indexes.append(i.index + 1)
             }
         }
         
         for i in questionCardView.checkButtonsArray {
             if i.selectedAnswer {
                 AppConfig.shared.answers[AppConfig.shared.questionsCount].selected.append(i.answer)
-                AppConfig.shared.answers[AppConfig.shared.questionsCount].indexes.append(i.index)
+                AppConfig.shared.answers[AppConfig.shared.questionsCount].indexes.append(i.index + 1)
             }
         }
         
@@ -223,6 +244,21 @@ class QuestionViewController: UIViewController, QuestionDelegate {
         //8,18
         if AppConfig.shared.questionsCount == 0 {
 
+        } else if AppConfig.shared.questionsCount == 1 {
+            if !questionCardView.buttonsArray.isEmpty, AppConfig.shared.answers[AppConfig.shared.questionsCount].selected.isEmpty {
+                return
+            } else if !questionCardView.checkButtonsArray.isEmpty, AppConfig.shared.answers[AppConfig.shared.questionsCount].selected.isEmpty {
+                return
+            } else if !questionCardView.textFieldArray.isEmpty && questionCardView.buttonsArray.isEmpty, AppConfig.shared.answers[AppConfig.shared.questionsCount].text.isEmpty,
+                AppConfig.shared.questionsCount != 17 {
+                return
+            }
+            
+            for i in questionCardView.textFieldArray {
+                if !((i.text?.isEmpty)!) {
+                    AppConfig.shared.answers[AppConfig.shared.questionsCount].indexes.append(Int(i.text!) ?? 0)
+                }
+            }
         } else if AppConfig.shared.questionsCount == 12 {
 
         } else if AppConfig.shared.questionsCount > 0 {
@@ -230,7 +266,7 @@ class QuestionViewController: UIViewController, QuestionDelegate {
                 return
             } else if !questionCardView.checkButtonsArray.isEmpty, AppConfig.shared.answers[AppConfig.shared.questionsCount].selected.isEmpty {
                 return
-            }else if !questionCardView.textFieldArray.isEmpty && questionCardView.buttonsArray.isEmpty, AppConfig.shared.answers[AppConfig.shared.questionsCount].text.isEmpty,
+            } else if !questionCardView.textFieldArray.isEmpty && questionCardView.buttonsArray.isEmpty, AppConfig.shared.answers[AppConfig.shared.questionsCount].text.isEmpty,
                 AppConfig.shared.questionsCount != 17 {
                 return
             }

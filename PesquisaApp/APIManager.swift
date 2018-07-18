@@ -11,7 +11,7 @@ import Alamofire
 
 class APIManager: NSObject {
     static let shared = APIManager()
-    func sendAnswers(data: [Answer]) {
+    func sendAnswers(data: [Answer], completion: @escaping (Int)-> Void ) {
         let url = URL(string: "https://hugomontenegro.lienotecnologia.com.br/api/Answers/saveAll")
         let deviceID = UIDevice.current.identifierForVendor?.uuidString
         var user = User(name: "", email: "", phone: "", browser: deviceID ?? "noId")
@@ -107,6 +107,10 @@ class APIManager: NSObject {
         
         request(url!, method: .post, parameters: json.dict ?? [:], encoding: JSONEncoding.default, headers: nil).responseJSON { (response) in
             print(response.debugDescription)
+            
+            if let json = response.result.value as? [String: Any], let user = json["user"] as? [String: Any], let position = user["number"] as? Int {
+                completion(position)
+            }
         }
         
     }
