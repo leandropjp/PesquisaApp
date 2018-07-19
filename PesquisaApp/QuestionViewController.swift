@@ -60,7 +60,7 @@ class QuestionViewController: UIViewController, QuestionDelegate {
                 lastInfo = "Você foi o \(position)° a responder."
                 let attrs = NSMutableAttributedString(string: "Parabéns! \n\n", attributes: [.font: UIFont.boldSystemFont(ofSize: 22),
                                                                                               .foregroundColor: UIColor.black])
-                attrs.append(NSAttributedString(string: "\(lastInfo) \nAgora você acesso gratuito ao livro IMPULSIVA-MENTE.", attributes: [.font: UIFont.systemFont(ofSize: 16),
+                attrs.append(NSAttributedString(string: "\(lastInfo) \nAgora você tem acesso gratuito ao livro IMPULSIVA-MENTE.", attributes: [.font: UIFont.systemFont(ofSize: 16),
                                                                                                                                             .foregroundColor: UIColor.gray]))
                 congrats.attributedText = attrs
             } else {
@@ -70,11 +70,12 @@ class QuestionViewController: UIViewController, QuestionDelegate {
                     let attrs = NSMutableAttributedString(string: "Parabéns! \n\n", attributes: [.font: UIFont.boldSystemFont(ofSize: 22),
                                                                                                   .foregroundColor: UIColor.black])
                     attrs.append(NSAttributedString(string: "\(lastInfo) \nAgora você acesso gratuito ao livro IMPULSIVA-MENTE.", attributes: [.font: UIFont.systemFont(ofSize: 16),
-                                                                                                                                                .foregroundColor: UIColor.gray]))
+                                                                                                                                                .foregroundColor:
+                                                                                                                                                    UIColor.gray]))
                     congrats.attributedText = attrs
                 })
             }
-
+            
             UserDefaults.standard.set(true, forKey: finishedPoolKey)
             let btn = TopIconButton()
             btn.setImage(#imageLiteral(resourceName: "Icon_download").withRenderingMode(.alwaysOriginal), for: .normal)
@@ -100,18 +101,18 @@ class QuestionViewController: UIViewController, QuestionDelegate {
             backBtn.addTarget(self, action: #selector(goBack), for: .touchUpInside)
             
             view.addSubview(backBtn)
-
+            
             backBtn.anchor(top: btn.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 24, paddingLeft: 32, paddingBottom: 0, paddingRight: 32, width: 0, height: 0)
             
             
             
-//            do {
-//                let encoder = JSONEncoder()
-//                encoder.outputFormatting = .prettyPrinted
-//                let jsonData = try encoder.encode(AppConfig.shared.answers)
-//                let jsonString = String(data: jsonData, encoding: .utf8)!
-//                print(jsonString)
-//            } catch { print(error) }
+            //            do {
+            //                let encoder = JSONEncoder()
+            //                encoder.outputFormatting = .prettyPrinted
+            //                let jsonData = try encoder.encode(AppConfig.shared.answers)
+            //                let jsonString = String(data: jsonData, encoding: .utf8)!
+            //                print(jsonString)
+            //            } catch { print(error) }
             
             return
         }
@@ -153,7 +154,7 @@ class QuestionViewController: UIViewController, QuestionDelegate {
         
         viewStack.anchor(top: progressStack.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 16, paddingLeft: 16, paddingBottom: 0, paddingRight: 16, width: 0, height: 0)
         
-        goBtn.sendActions(for: .touchUpInside)
+        
     }
     
     @objc func downloadTapped() {
@@ -243,7 +244,7 @@ class QuestionViewController: UIViewController, QuestionDelegate {
         }
         //8,18
         if AppConfig.shared.questionsCount == 0 {
-
+            
         } else if AppConfig.shared.questionsCount == 1 {
             if !questionCardView.buttonsArray.isEmpty, AppConfig.shared.answers[AppConfig.shared.questionsCount].selected.isEmpty {
                 return
@@ -253,14 +254,15 @@ class QuestionViewController: UIViewController, QuestionDelegate {
                 AppConfig.shared.questionsCount != 17 {
                 return
             }
-            
+            AppConfig.shared.answers[AppConfig.shared.questionsCount].selected.removeAll()
+            AppConfig.shared.answers[AppConfig.shared.questionsCount].text.removeAll()
             for i in questionCardView.textFieldArray {
                 if !((i.text?.isEmpty)!) {
                     AppConfig.shared.answers[AppConfig.shared.questionsCount].indexes.append(Int(i.text!) ?? 0)
                 }
             }
         } else if AppConfig.shared.questionsCount == 12 {
-
+            
         } else if AppConfig.shared.questionsCount > 0 {
             if !questionCardView.buttonsArray.isEmpty, AppConfig.shared.answers[AppConfig.shared.questionsCount].selected.isEmpty {
                 return
@@ -271,12 +273,12 @@ class QuestionViewController: UIViewController, QuestionDelegate {
                 return
             }
         }
-
+        
         AppConfig.shared.questionsCount += 1
         AppConfig.shared.progressBarValue += self.progresBar.frame.width / 35
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "QuestionViewControllerID") as! QuestionViewController
-
+        
         vc.modalPresentationStyle = .custom
         vc.modalTransitionStyle = .crossDissolve //you can change this to do different animations
         vc.view.layer.speed = 1 //adjust this to animate at different speeds
