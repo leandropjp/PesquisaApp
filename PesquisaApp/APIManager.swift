@@ -85,7 +85,18 @@ class APIManager: NSObject {
                         "comment": value.comment], "questionId": arrayID[index]]
                     answers.append(dict)
                 } else {
-                    answers.append(ans.dict)
+                    if index == 12 {
+                        var tmp = ans.dict
+                        if var empresa = ans.dict["answer"] as? [String: Any] {
+                            empresa["comment"] = ""
+                            empresa["value"] = item.text.first ?? ""
+                            tmp["answer"] = empresa
+                            answers.append(tmp)
+                        }
+                    } else {
+                        answers.append(ans.dict)
+                    }
+                    
                 }
             }
         }
